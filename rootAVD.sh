@@ -1145,9 +1145,9 @@ ExtractMagiskViaPM() {
 DownloadUptoDateSript() {
 	echo "[*] Trying to Download the Up-To-Date Script Version"
 	
-	local DLL_URL="https://github.com/newbit1/rootAVD/raw/master/"
+	local DLL_URL="https://raw.githubusercontent.com/cygnus-xr1/rootAVD/master/"
 	local DLL_SCRIPT="rootAVD.sh"
-	local DLL_ROOTAVD_ZIP="https://github.com/newbit1/rootAVD/archive/refs/heads/master.zip"
+	local DLL_ROOTAVD_ZIP="https://github.com/cygnus-xr1/rootAVD/archive/refs/heads/master.zip"
 	local PKG_PATH=""
 	
 	ExtractMagiskViaPM
@@ -1156,7 +1156,6 @@ DownloadUptoDateSript() {
 	DownLoadFile $DLL_URL $DLL_SCRIPT
 }
 
-# https://github.com/cygnus-xr1/rootAVD/blob/master/rootAVD.sh#L1066#
 # This function is used to extract the Busybox binary from the script itself.
 ExtractBusyboxFromScript() {
 	local BBSCR=$BASEDIR/bbscript.sh
