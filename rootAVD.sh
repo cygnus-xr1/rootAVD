@@ -10,6 +10,7 @@
 ###################
 
 # Copied 1 to 1 from topjohnwu
+# This code block seems to be a generic utility function for extracting the parent directory of a given path. It does not contain any inherently malicious functionality.
 getdir() {
   case "$1" in
     */*) dir=${1%/*}; [ -z $dir ] && echo "/" || echo $dir ;;
@@ -17,6 +18,7 @@ getdir() {
   esac
 }
 
+# This code block appears to be responsible for retrieving and setting various flags and variables related to the system configuration and state. It doesn't contain any obvious malicious code, but its purpose and potential implications depend on the context in which it is used within the overall script or application.
 get_flags() {
 	echo "[-] Get Flags"
 
@@ -64,6 +66,7 @@ get_flags() {
 	echo "[*] KEEPFORCEENCRYPT=$KEEPFORCEENCRYPT"
 }
 
+# This code block seems to be responsible for copying files from specific directories to the base directory ($BASEDIR), renaming some of the files, and setting the permissions. It doesn't contain any obvious malicious code, but its purpose and potential implications depend on the context in which it is used within the overall script or application.
 copyARCHfiles() {	
 	BINDIR=$BASEDIR/lib/$ABI
 	ASSETSDIR=$BASEDIR/assets
@@ -94,6 +97,7 @@ copyARCHfiles() {
 	export STUBAPK
 }
 
+# This code block seems to be responsible for detecting the device's architecture, API level, and Android version, and setting the corresponding variables. It doesn't contain any obvious malicious code, but its purpose and potential implications depend on the context in which it is used within the overall script or application.
 api_level_arch_detect() {
 	echo "[-] Api Level Arch Detect"
 	# Detect version and architecture
@@ -162,11 +166,13 @@ api_level_arch_detect() {
 	export AVERSION
 }
 
+# This code block provides a mechanism to abort the script when necessary. It doesn't contain any malicious code and simply exits the script when invoked.
 abort_script() {
 	echo "[!] aborting the script"
 	exit
 }
 
+# This code block is used to determine the compression method of a file based on its first 8 bytes. It checks if the first 8 bytes match specific patterns for the LZ4 or Gzip compression methods and sets the ENDG variable accordingly. The value of ENDG indicates the file extension associated with the compression method (".lz4" for LZ4 or ".gz" for Gzip). This function doesn't contain any obvious malicious code, but its purpose and potential implications depend on the context in which it is used within the overall script or application.
 compression_method() {
 	local FILE="$1"
 	local FIRSTFILEBYTES
@@ -184,6 +190,7 @@ compression_method() {
 	echo "$ENDG"
 }
 
+# This code block is used to detect the compression method used for a ramdisk image file (ramdisk.img). It checks the first 8 bytes of the file and determines if it matches the patterns for the LZ4 or Gzip compression methods. It then sets the appropriate variables (ENDG, METHOD, RAMDISK_LZ4, RAMDISK_GZ, and COMPRESS_SIGN) based on the detected compression method. If the compression method is unknown, the script is aborted. This function doesn't contain any obvious malicious code, but its purpose and potential implications depend on the context in which it is used within the overall script or application.
 detect_ramdisk_compression_method() {
 	echo "[*] Detecting ramdisk.img compression"
 	RDF=$BASEDIR/ramdisk.img
@@ -225,6 +232,7 @@ detect_ramdisk_compression_method() {
 	echo "[!] Ramdisk.img uses $METHOD compression"
 }
 
+# This code block is used to run Magisk for installing or patching a fake boot image. It stops the target application, launches Magisk, prompts the user to install or patch a specific file ($FBI), and waits for the user to press Enter. The user's input is read with a timeout of 60 seconds. The code block itself doesn't contain any obvious malicious code, but its purpose and potential implications depend on the context in which it is used within the overall script or application.
 runMagisk_to_Patch_fake_boot_img() {
 	am force-stop $PKG_NAME
 	echo "[-] Starting Magisk"
@@ -237,6 +245,7 @@ runMagisk_to_Patch_fake_boot_img() {
 	esac
 }
 
+# This code block is used to detect the current user and switch to user 0 if the current user ID is different from 0. The specific purpose and implications of this user detection and switching depend on the context in which it is used within the overall script or application.
 detecting_users() {
 	local userID=""
 	local userZero=0
@@ -251,6 +260,7 @@ detecting_users() {
 	fi
 }
 
+# This code block generates a build.prop file by extracting system properties using getprop and modifies it using sed. It also generates a recovery.fstab file by copying from an existing file. Finally, it adds the build.prop and recovery.fstab files to a stock ramdisk using magiskboot. The purpose and implications of these operations depend on the specific context in which this function is used within the overall script or application.
 generate_build_prop() {
 	echo "[*] generating Build.prop"
 	local BPR=$BASEDIR/build.prop
@@ -269,6 +279,7 @@ generate_build_prop() {
 	#BASEDIR=$(pwd)
 }
 
+# This code block is responsible for creating a fake boot image by generating a minimal header and repacking the ramdisk image. It also involves invoking various functions related to installing Magisk, detecting users, and running Magisk to patch the fake boot image. The purpose and implications of these operations depend on the specific context in which this function is used within the overall script or application.
 create_fake_boot_img() {
 	echo "[*] Creating a fake Boot.img"
 	FBHI=$BASEDIR/fakebootheader.img
@@ -296,6 +307,7 @@ create_fake_boot_img() {
 	RemoveTemporarilyMagisk
 }
 
+# This function is responsible for unpacking the patched ramdisk from a previously created fake boot image. It searches for the latest magisk_patched file in the specified directory, unpacks the ramdisk using magiskboot, and then deletes all the magisk_patched files.
 unpack_patched_ramdisk_from_fake_boot_img() {
 
 	if [ "$MagiskPatchedFiles" != "" ]; then
@@ -316,6 +328,7 @@ unpack_patched_ramdisk_from_fake_boot_img() {
 	fi
 }
 
+# This function is responsible for processing the fake boot image. It checks if there are external magisk_patched files available and unpacks the ramdisk from the latest file. If no external files are found, it creates a fake boot image, checks for magisk_patched files again, and unpacks the ramdisk if found.
 process_fake_boot_img() {
 	
 	SDCARD=/sdcard/Download
@@ -332,6 +345,7 @@ process_fake_boot_img() {
 	fi
 }
 
+# This function is responsible for constructing the environment required for the script. If the script is running as root, it sets up the necessary directories and files, changes permissions, and reboots the system. If the script is not running as root, it displays an error message and suggests verifying root access.
 # requires additional setup
 # EnvFixTask
 construct_environment() {
@@ -366,6 +380,7 @@ construct_environment() {
 	abort_script
 }
 
+# The function can be used to validate a file's existence, readability, size, writability, and regularity.
 checkfile() {
 	#echo "checkfile $1"
 	if [ -r "$1" ]; then
@@ -384,6 +399,7 @@ checkfile() {
 	return 0
 }
 
+# The function allows for the installation of multiple APK files in the Apps folder, and it handles the scenario where an incompatible version of an app is already installed.
 # If all is done well so far, you can install some APK's to the AVD
 # every APK file in the Apps DIR will be (re)installed
 # Like magisk.apk etc.
@@ -417,6 +433,7 @@ install_apps() {
 	done
 }
 
+# The function ensures that a backup file is only created if it doesn't already exist. This helps prevent overwriting existing backup files and allows for preserving the original file state before making any modifications.
 create_backup() {
 	local FILE=""
 	local FILEPATH=""
@@ -436,6 +453,7 @@ create_backup() {
 	fi
 }
 
+# The function is designed to simplify the process of pushing files from the local machine to the AVD using the adb tool.
 pushtoAVD() {
 	local SRC=""
 	local DST="$2"
@@ -453,6 +471,7 @@ pushtoAVD() {
 	echo "[-] $ADBPUSHECHO"
 }
 
+# The function simplifies the process of pulling files from the AVD to the local machine using the adb tool.
 pullfromAVD() {
 	local SRC=""
 	local DST=""
@@ -466,6 +485,7 @@ pullfromAVD() {
 	fi
 }
 
+# The function simplifies the process of restoring backed-up files by automatically iterating through the backup files in a directory and replacing the corresponding original files with their backups.
 restore_backups() {
 	local BACKUPFILE=""
 	local RESTOREFILE=""
@@ -479,6 +499,8 @@ restore_backups() {
 	exit 0
 }
 
+
+# The function provides a convenient way to switch between the original and patched versions of the ramdisk file by renaming the files accordingly.
 toggle_Ramdisk() {
 
 	#AVDPATHWITHRDFFILE="$1"
@@ -511,6 +533,7 @@ toggle_Ramdisk() {
 	exit 0
 }
 
+# The function helps ensure that ADB is properly set up and functional before proceeding with further operations.
 TestADB() {
 	local HOME=~/
 	local ADB_DIR_M=Library/Android/sdk/platform-tools
@@ -555,6 +578,7 @@ TestADB() {
 	fi
 }
 
+# The purpose of this function is to make BlueStacks writable by changing the type of the Root.vdi file from "Readonly" to "Normal" in the AVBox configuration.
 MakeBlueStacksRW() {
 
 	if ( checkfile $BLUESTACKSPATH/$AVBOXFILE -eq 0 ); then
@@ -569,6 +593,7 @@ MakeBlueStacksRW() {
 	mv $AVBOX".edit" $AVBOX
 }
 
+# The purpose of this function is to initiate the shut down and reboot process for the AVD or BlueStacks, and it provides instructions and information related to rooting and using Magisk with the respective environments.
 ShutDownAVD() {
 	
 	if ( "$BLUESTACKS" ); then
@@ -600,6 +625,7 @@ ShutDownAVD() {
 	echo "[!] Huge Credits and big Thanks to topjohnwu, shakalaca, vvb2060 and HuskyDG"
 }
 
+# This function primarily focuses on copying Magisk-related files to the AVD or BlueStacks environment, executing the rootAVD.sh script, and performing additional operations based on the specified flags and conditions.
 CopyMagiskToAVD() {
 	# Set Folders and FileNames	
 	echo "[*] Set Directorys"
@@ -776,10 +802,14 @@ CopyMagiskToAVD() {
 #   echo something | _json_value "Arguments"
 # Result: print extracted value
 ###################################################
+# This function is used to extract a specified field value from a JSON string or file.
+# Note: The function assumes that the variable $BB contains the path to the grep, sed, and awk binaries, which are typically used in BusyBox.
 json_value() {
     $BB grep -o "\"""${1}""\"\:.*" | $BB sed -e "s/.*\"""${1}""\": //" -e 's/[",]*$//' -e 's/["]*$//' -e 's/[,]*$//' -e "s/\"//" -n -e "${2}"p
 }
 
+# This function is used to check the internet connection status of an AVD (Android Virtual Device).
+# Note: The function assumes that the variable $BB contains the path to the timeout and wget binaries, which are typically used in BusyBox.
 CheckAVDIsOnline() {	
 	if [ -z $AVDIsOnline ]; then
 		echo "[-] Checking AVDs Internet connection..."
@@ -793,6 +823,8 @@ CheckAVDIsOnline() {
 	export AVDIsOnline
 }
 
+# This function is used to format a version string in a pretty way.
+# Note: The function assumes that the variable $BB contains the path to the grep binary, which is typically used in BusyBox.
 GetPrettyVer() {
 		if echo $1 | $BB grep -q '\.'; then
 			PRETTY_VER=$1
@@ -802,6 +834,8 @@ GetPrettyVer() {
 		echo "$PRETTY_VER"
 }
 
+# This function is used to download a file from a specified URL.
+# Note: The function assumes that the variable $BASEDIR contains the base directory path, and the variable $BB contains the path to the wget and dd binaries, which are typically used in BusyBox.
 DownLoadFile() {
 	CheckAVDIsOnline
 	if ("$AVDIsOnline"); then
@@ -842,6 +876,8 @@ DownLoadFile() {
 	fi
 }
 
+# This function is used to download the USB Host Permissions Module zip file if it is not already present.
+# Note: The function assumes that the variable $BB contains the path to the wget binary, which is typically used in BusyBox.
 GetUSBHPmod() {
 	USBHPZSDDL="/sdcard/Download/usbhostpermissons.zip"
 	USBHPZ="https://github.com/newbit1/usbhostpermissons/releases/download/v1.0/usbhostpermissons.zip"
@@ -853,6 +889,8 @@ GetUSBHPmod() {
 	fi
 }
 
+# This function is used to fetch and process data from a JSON file related to Magisk downloads.
+# Note: The function assumes that the $BB variable contains the path to the wget binary, which is typically used in BusyBox.
 FetchMagiskDLData() {
 	local SRCURL="$1"
 	local CHANNEL="$2"
@@ -902,6 +940,8 @@ FetchMagiskDLData() {
 	rm -rf *.json > /dev/null 2>&1
 }
 
+# This function is used to fetch and process commit data related to Magisk releases.
+# Note: The function assumes that the $BB variable contains the path to the wget binary, which is typically used in BusyBox.
 FetchMagiskRLCommits() {
 #$GITHUB $TJWCOMMITSURL $TJWBLOBURL $CHANNEL $TJWREPOURL
 	local DOMAIN="$1"
@@ -922,6 +962,8 @@ FetchMagiskRLCommits() {
 	done
 }
 
+# This function is used to check and choose available Magisk versions for installation.
+# Note: The function assumes that the $BB variable contains the path to the wget binary, which is typically used in BusyBox.
 CheckAvailableMagisks() {
 
 	MAGISK_VERSIONS=$BASEDIR/magisk_versions.txt
@@ -1043,6 +1085,7 @@ CheckAvailableMagisks() {
 	export MAGISKVERCHOOSEN
 }
 
+# This function is used to install Magisk on the device temporarily
 InstallMagiskTemporarily() {
 	PKG_NAMES=$(pm list packages magisk | cut -f 2 -d ":") > /dev/null 2>&1
 	PKG_NAME=""
@@ -1057,12 +1100,14 @@ InstallMagiskTemporarily() {
 	PKG_NAME=$(pm list packages magisk | cut -f 2 -d ":") > /dev/null 2>&1	
 }
 
+# This function is used to remove Magisk from the device
 RemoveTemporarilyMagisk() {
 	echo "[!] Removing Temporarily installed Magisk"
 	pm clear $PKG_NAME >/dev/null 2>&1
 	pm uninstall $PKG_NAME >/dev/null 2>&1
 }
 
+# This function is used to search for a working BusyBox version on the device
 FindWorkingBusyBox() {
 	echo "[*] Finding a working Busybox Version"
 	local bbversion=""
@@ -1085,6 +1130,7 @@ FindWorkingBusyBox() {
 	done
 }
 
+# This function is used to extract Magisk library files from the temporarily installed Magisk package
 ExtractMagiskViaPM() {
 	InstallMagiskTemporarily
 	PKG_PATH=$(pm path $PKG_NAME)
@@ -1095,6 +1141,7 @@ ExtractMagiskViaPM() {
 	RemoveTemporarilyMagisk
 }
 
+# This function is used to download the up-to-date version of the script from a specified URL.
 DownloadUptoDateSript() {
 	echo "[*] Trying to Download the Up-To-Date Script Version"
 	
@@ -1109,6 +1156,8 @@ DownloadUptoDateSript() {
 	DownLoadFile $DLL_URL $DLL_SCRIPT
 }
 
+# https://github.com/cygnus-xr1/rootAVD/blob/master/rootAVD.sh#L1066#
+# This function is used to extract the Busybox binary from the script itself.
 ExtractBusyboxFromScript() {
 	local BBSCR=$BASEDIR/bbscript.sh
 	local bblineoffset=""
@@ -1141,6 +1190,7 @@ ExtractBusyboxFromScript() {
 	fi
 }
 
+# This function is used to update the Busybox binary in the script.
 UpdateBusyBoxToScript() {
 	local BBSCR=$BASEDIR/bbscript.sh
 	local FSIZE=""
@@ -1176,6 +1226,7 @@ UpdateBusyBoxToScript() {
 	#sed -i "$((bblineoffset+1))","$last_line"'d' $BBSCR
 }
 
+# This function is responsible for copying the Busybox binary from the "lib" directory to the working directory.
 CopyBusyBox() {
 	echo "[*] Copy busybox from lib to workdir"
 # 	if [ -e $BASEDIR/lib ]; then
@@ -1188,6 +1239,7 @@ CopyBusyBox() {
 	chmod +x $BB
 }
 
+# This function is responsible for moving the Busybox binary from the "lib" directory to the working directory.
 MoveBusyBox() {
 	echo "[*] Move busybox from lib to workdir"
 # 	if [ -e $BASEDIR/lib ]; then
@@ -1200,6 +1252,7 @@ MoveBusyBox() {
 	chmod +x $BB
 }
 
+# This function is responsible for locating an unzip binary and extracting the contents of Magisk.zip.
 FindUnzip() {
 	local RESULT=""
 	if [ -e $MZ ]; then
@@ -1240,6 +1293,7 @@ FindUnzip() {
 	fi
 }
 
+# This function prepares the environment for executing the script by setting up the necessary files and directories.
 PrepBusyBoxAndMagisk() {
 	echo "[-] Switch to the location of the script file"
 	BASEDIR="`getdir "${BASH_SOURCE:-$0}"`"
@@ -1264,6 +1318,7 @@ PrepBusyBoxAndMagisk() {
 	CheckAvailableMagisks
 }
 
+# This function is responsible for re-running the script in a Magisk Busybox standalone (D)ASH environment.
 ExecBusyBoxAsh() {
 	export PREPBBMAGISK=1
 	export ASH_STANDALONE=1
@@ -1281,6 +1336,7 @@ ExecBusyBoxAsh() {
 	exec $BB sh $0 $@
 }
 
+# This function is used to repack the ramdisk.
 repack_ramdisk() {
 	echo "[*] Repacking ramdisk .."
 	cd $TMP/ramdisk > /dev/null
@@ -1288,6 +1344,7 @@ repack_ramdisk() {
 	cd - > /dev/null
 }
 
+# This function is used to extract the patched ramdisk.
 extract_patched_ramdisk() {
 echo "[-] Clearing $TMP/ramdisk"
 rm -fR $TMP/ramdisk
@@ -1301,6 +1358,7 @@ cd - > /dev/null
 exit
 }
 
+# This function is used to extract the stock ramdisk.
 extract_stock_ramdisk() {
 echo "[-] Clearing $TMP/ramdisk"
 rm -fR $TMP/ramdisk
@@ -1312,6 +1370,7 @@ cd $TMP/ramdisk > /dev/null
 cd - > /dev/null
 }
 
+# This function is used to decompress the ramdisk.img file.
 decompress_ramdisk(){
 	echo "[-] taken from shakalaca's MagiskOnEmulator/process.sh"
 	echo "[*] executing ramdisk splitting / extraction / repacking"
@@ -1407,6 +1466,7 @@ decompress_ramdisk(){
 	#update_lib_modules
 }
 
+# This function is used to apply various modifications to the ramdisk image.
 apply_ramdisk_hacks() {
 
 	# Call rootAVD with PATCHFSTAB if you want the RAMDISK merge your modded fstab.ranchu before Magisk Mirror gets mounted
@@ -1464,6 +1524,7 @@ apply_ramdisk_hacks() {
 	update_lib_modules
 }
 
+# This function is used to verify the origin of the boot image's ramdisk by comparing the kernel release number of the Android Virtual Device (AVD) with the kernel release number extracted from the ramdisk.
 verify_ramdisk_origin() {
 	echo "[*] Verifying Boot Image by its Kernel Release number:"
 	local KRNAVD=$(uname -r)
@@ -1481,6 +1542,7 @@ verify_ramdisk_origin() {
 	fi
 }
 
+# This function is used to test the status of the ramdisk patching on the boot image.
 test_ramdisk_patch_status(){
 
 	if [ -e ramdisk.cpio ]; then
@@ -1519,6 +1581,7 @@ test_ramdisk_patch_status(){
 	export PATCHEDBOOTIMAGE
 }
 
+# This function performs various patches and modifications to the ramdisk.
 patching_ramdisk(){
 	##########################################################################################
 	# Ramdisk patches
@@ -1575,7 +1638,7 @@ patching_ramdisk(){
 	"add 000 .backup/.magisk config"
 }
 
-
+# This function is responsible for renaming or copying the "Magisk.zip" file to "Magisk.apk" based on the value of the MAGISKVERCHOOSEN variable.
 rename_copy_magisk() {
 	if ( "$MAGISKVERCHOOSEN" ); then
 		echo "[!] Copy Magisk.zip to Magisk.apk"
@@ -1586,6 +1649,7 @@ rename_copy_magisk() {
 	fi
 }
 
+# This function is responsible for compressing and repacking the modified ramdisk into the "ramdiskpatched4AVD.img" format.
 repacking_ramdisk(){
 	if [ $((STATUS & 4)) -ne 0 ]; then
 		echo "[!] Compressing ramdisk before repacking it"
@@ -1597,15 +1661,22 @@ repacking_ramdisk(){
 	$BASEDIR/magiskboot compress=$METHOD "ramdisk.cpio" "ramdiskpatched4AVD.img"
 }
 
+# Strips HTML links from the specified file by using the sed command.
 strip_html_links() {
 	sed -i -e 's/<a href=/\n<a href=/g;s/<\/a>/<\/a>\n/g' "$1"
 }
+
+# Filters out lines containing the string ">Update kernel to builds" from the specified file using the sed command and the -n option with the /pattern/p syntax.
 strip_kernel_builds() {
 	sed -i -n '/>Update kernel to builds/p' "$1"
 }
+
+# Filters out lines containing the string ">Next" from the specified file using the sed command and the -n option with the /pattern/p syntax.
 strip_next_pages() {
 	sed -n '/>Next/p' "$1"
 }
+
+# This function is used to find and retrieve the next pages of a website by following the "Next" links.
 find_next_pages() {
 	local URL="$2"
 	local NEXTPAGESRC=""
@@ -1623,7 +1694,7 @@ find_next_pages() {
 		NEXTPAGESRC=$(strip_next_pages $TMPHTML)					
 	done
 }
-
+# This function handles the update of prebuilt kernel modules by fetching the latest versions, allowing the user to choose a version, downloading the necessary files, and installing them into the ramdisk. The function also performs checks and adjustments for different scenarios, such as patched or stock ramdisks.
 update_lib_modules() {
 	local INITRAMFS=initramfs.img
 	if ("$AVDIsOnline"); then
@@ -1864,6 +1935,7 @@ update_lib_modules() {
 #### BlueStacks functions
 ### taken from HuskyDG script MagiskOnEmu libbash.so ->
 
+# The function uses the RANDOM variable and string slicing to randomly select characters from the specified character set to build the random string. The random_pick variable holds the randomly generated index used for character selection.
 random() {
 	VALUE=$1; TYPE=$2; PICK="$3"; PICKC="$4"
 	TMPR=""
@@ -1881,10 +1953,13 @@ random() {
 		  done
 }
 
+# The random_str() function generates a random string of variable length using a combination of alphanumeric characters.
 random_str() {
 	random_length=$(random 1 custom 56789 5);
 	random $random_length custom "qwertyuiopasdfghjklzxcvbnm0123456789QWERTYUIOPASDFGHJKLZXCVBNM" 63 | base64 | sed "s/=//g"
 }
+
+# This function sets up the Magisk environment and loads the Magisk modules. It includes various commands to mount directories, clone folders, and configure Magisk-related services.
 magisk_loader() {
 	magisk_overlay=`random_str`
 	magisk_postfsdata=`random_str`
@@ -2225,6 +2300,7 @@ umount -l /system/etc/init/hw/init.rc
 }
 ### <- taken from HuskyDG script MagiskOnEmu libbash.so
 
+# This function checks for the existence of the su binary
 CheckBlueStacksSUBinary(){
 	SU="/system/xbin/bstk/su"
 	echo "[-] Checking for build-in $SU binary"
@@ -2239,6 +2315,7 @@ CheckBlueStacksSUBinary(){
 	#$SU -c 'setenforce 0'	
 } 
 
+# This function is responsible for remounting a specific path as read-write and performing backup and copy operations related to the BlueStacks Ramdisk.
 GetBlueStacksRamdisk() {
 	echo "[*] Getting BlueStacks Ramdisk"
 
@@ -2259,6 +2336,7 @@ GetBlueStacksRamdisk() {
 	cp -fac $BSTKRDF $BASEDIR/
 }
 
+# This function is responsible for performing various finalization tasks for BlueStacks, such as overwriting the ramdisk file, changing file permissions and ownership, cleaning folders, and remounting the specified path as read-only.
 FinalizeBlueStacks() {
 	if ! $DEBUG; then
 		echo "[-] Overwriting $BSTKRDF with ramdiskpatched4AVD.img"
@@ -2285,6 +2363,7 @@ FinalizeBlueStacks() {
 #       chmod permission target
 #       chcon context target
 
+# The purpose of this function is to provide a convenient way to set permissions, ownership, and SELinux context for a file within a shell script. It abstracts away the individual commands (chown, chmod, and chcon) and provides error handling by returning a non-zero value if any of the commands fail.
 set_perm() {
 	chown $2:$3 $1 || return 1
 	chmod $4 $1 || return 1
@@ -2300,6 +2379,7 @@ set_perm() {
 #     for all directories in <directory> (including itself), it will call:
 #       set_perm dir owner group dirpermission context
 
+# The purpose of this function is to apply the same set of permissions, ownership, and SELinux context recursively to all files and directories within a specified directory. It uses the find command to locate the files and directories and calls the set_perm function to set the permissions, ownership, and SELinux context for each file and directory individually.
 set_perm_recursive() {
 	find $1 -type d 2>/dev/null | while read dir; do
 	set_perm $dir $2 $3 $4 $6
@@ -2309,6 +2389,7 @@ set_perm_recursive() {
 	done
 }
 
+# This function is responsible for setting permissions and SELinux contexts for various files and directories related to BlueStacks Magisk integration.
 SettingBlueStackMagiskPermissions() {
 	echo "[*] Setting BlueStack Magisk Permissions"
 	local ROOT=$(stat -c %u /dev)
@@ -2329,6 +2410,7 @@ SettingBlueStackMagiskPermissions() {
 	cd - > /dev/null
 }
 
+# The purpose of this function is to prepare the BlueStacks ramdisk for Magisk installation by copying the necessary Magisk files and directories, generating boot scripts, setting permissions, and repacking the ramdisk with the patched files. This enables Magisk functionality within BlueStacks.
 InstallMagiskIntoBlueStacksRamdisk() {
 	echo "[-] Patching BlueStacks ramdisk .."
 	echo "[*] Taken from HuskyDG script MagiskOnEmu/libbash.so"
@@ -2363,11 +2445,13 @@ InstallMagiskIntoBlueStacksRamdisk() {
 	cd - > /dev/null
 }
 
+# This function appears to be a placeholder function for testing the "service" module.
 service(){
 	echo "[-] service Module testing"
 	#exit
 }
 
+# This function is responsible for installing Magisk on the AVD (Android Virtual Device) or emulator.
 InstallMagiskToAVD() {
 
 	if [ -z $PREPBBMAGISK ]; then
@@ -2422,6 +2506,7 @@ InstallMagiskToAVD() {
 	fi
 }
 
+# This function is used to locate system image files (ramdisk.img) on the local machine.
 FindSystemImages() {
 	local HOME=~/
 	local SYSIM_DIR_M=Library/Android/sdk/system-images
@@ -2467,6 +2552,7 @@ FindSystemImages() {
 	done
 }
 
+# This function is used to display the help text and usage information for the rootAVD script.
 ShowHelpText() {
 bold=$(tput bold)
 normal=$(tput sgr0)
@@ -2546,6 +2632,7 @@ FindSystemImages
 exit
 }
 
+# This function is used to process the command line arguments passed to the rootAVD script.
 ProcessArguments() {
 	DEBUG=false
 	PATCHFSTAB=false
@@ -2667,6 +2754,7 @@ ProcessArguments() {
 	export FAKEBOOTIMG
 }
 
+# The script entry point begins by checking the environment in which the script is running. It determines whether it is running in an emulator shell or not.
 # Script Entry Point
 # Checking in which shell we are
 
